@@ -38,7 +38,9 @@ def process_h5(filename, confidence_threshold, category_mapping, file_no):
 
                 # if prediction meets confidence threshold get data and save to put in results json
                 if score.max() > confidence_threshold:
-                    pred_class = np.argsort(score, axis=0)[-1:].item()  # Get class with highest score
+                    pred_class = np.argsort(score, axis=0)[-1].item()  # Get class with highest score
+                    if category_mapping.get(pred_class, 0) != 0:
+                        pred_class = np.argsort(score, axis=0)[-2].item()
                     #print("Class ", pred_class)
                     pred_score = score.max().item()  # Max confidence score
                     #print("Score ", pred_score)
@@ -62,12 +64,12 @@ def process_h5(filename, confidence_threshold, category_mapping, file_no):
                     pred_box[3] = round(pred_box[3] * y_scale, 2)  # y2 * image_height'''
 
                     # Store the result in list to store in json later
-                    if category_mapping.get(pred_class, 0) != 0:
-                        predictions.append({
-                        "image_id": image_name,
-                        "category_id": category_mapping.get(pred_class, 0),
-                        "bbox": pred_box,
-                        "score": round(pred_score, 3)
+
+                    predictions.append({
+                    "image_id": image_name,
+                    "category_id": category_mapping.get(pred_class, 0),
+                    "bbox": pred_box,
+                    "score": round(pred_score, 3)
                     })
             image_id += 1
     return predictions
