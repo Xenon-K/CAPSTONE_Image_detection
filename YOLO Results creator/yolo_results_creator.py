@@ -33,25 +33,34 @@ def process_h5(filename, confidence_threshold, category_mapping, file_no):
             bboxes = torch.tensor(np.array((file['data']['0'][batch])))
             scores = torch.tensor(np.array((file['data']['1'][batch])))
             classes = torch.tensor(np.array((file['data']['2'][batch])))
-            bboxesMinus = torch.squeeze(bboxes)
-            scoresMinus = torch.squeeze(scores)
-            classesMinus = torch.squeeze(classes)
-            print(classes.shape)
-            nms_indices = nms(bboxesMinus[..., :4], scoresMinus, iou_threshold)
-            bboxes = bboxes[0][nms_indices]
-            scores = scores[0][nms_indices]
-            classes = classes[0][nms_indices]
+            bboxes = bboxes.squeeze(0)  # Shape (8400, 4)
+            scores = scores.squeeze(0)  # Shape (8400,)
+            classes = classes.squeeze(0)
+            # Define the NMS threshold
+
+            # Apply NMS
+            indices = nms(bboxes, scores, iou_threshold)
+
+            # Use the indices to extract the remaining boxes, scores, and classes
+            bboxes = bboxes[indices]  # Shape (N, 4)
+            bboxes = bboxes.unsqueeze(0)
+            scores = scores[indices]  # Shape (N,)
+            scores = scores.unsqueeze(0)
+            classes = classes[indices]
+            classes = classes.unsqueeze(0)
             #batch_args = [arg[nms_indices] for arg in batch_args]
             # check each prediction
-            for j in range(len(scores)):
-                score = scores[j]
+            for j in range(len(scores[0])):
+                score = scores[0][j]
 
                 # if prediction meets confidence threshold get data and save to put in results json
                 if score.max() > confidence_threshold:
-                    pred_class=classes[j]
-                    # print("Class ", pred_class)
+                    if image_name == 724:
+                        print("hello")
+                    pred_class=classes[0][j].item()
+                    #print("Class ", pred_class)
                     pred_score = score.item()  # Max confidence score
-                    # print("Score ", pred_score)
+                    #print("Score ", pred_score)
                     pred_box = bboxes[0][j].tolist()  # The bounding box
 
                     # Convert box from cxcywh format (detr) to xywh (coco)
@@ -74,13 +83,13 @@ def process_h5(filename, confidence_threshold, category_mapping, file_no):
                     pred_box[3] = round(pred_box[3] * y_scale, 2)  # y2 * image_height'''
 
                     # Store the result in list to store in json later
-
-                    predictions.append({
-                        "image_id": image_name,
-                        "category_id": category_mapping.get(pred_class, 0),
-                        "bbox": pred_box,
-                        "score": round(pred_score, 3)
-                    })
+                    if category_mapping.get(pred_class, 0) != 0:
+                        predictions.append({
+                            "image_id": image_name,
+                            "category_id": category_mapping.get(pred_class, 0),
+                            "bbox": pred_box,
+                            "score": round(pred_score, 3)
+                        })
             image_id += 1
     return predictions
 
