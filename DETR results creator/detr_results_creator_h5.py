@@ -10,7 +10,7 @@ from scipy.special import softmax
 import h5py
 import os
 
-confidence_threshold = 0.3
+confidence_threshold = 0.0
 
 
 def process_h5(filename, confidence_threshold, category_mapping, file_no):
@@ -38,11 +38,17 @@ def process_h5(filename, confidence_threshold, category_mapping, file_no):
 
                 # if prediction meets confidence threshold get data and save to put in results json
                 if score.max() > confidence_threshold:
-                    pred_class = np.argsort(score, axis=0)[-1].item()  # Get class with highest score
-                    if category_mapping.get(pred_class, 0) != 0:
+                    pred_class = np.argsort(score, axis=0)[-1:].item()  # Get class with highest score
+                    pred_score = score.max().item()
+                    if category_mapping.get(pred_class, 0) == 0:
                         pred_class = np.argsort(score, axis=0)[-2].item()
+                        sorted_indices = np.argsort(score, axis=0)
+                        # Get the second highest index (second to last in sorted order)
+                        second_pred_class = sorted_indices[-2].item()
+                        # Get the second highest score
+                        pred_score = score[second_pred_class].item()
                     #print("Class ", pred_class)
-                    pred_score = score.max().item()  # Max confidence score
+                      # Max confidence score
                     #print("Score ", pred_score)
                     pred_box = bboxes[0][j].tolist()  # The bounding box
 
@@ -64,6 +70,12 @@ def process_h5(filename, confidence_threshold, category_mapping, file_no):
                     pred_box[3] = round(pred_box[3] * y_scale, 2)  # y2 * image_height'''
 
                     # Store the result in list to store in json later
+                    '''predictions.append({
+                    "image_id": image_name,
+                    "category_id": category_mapping.get(pred_class, 0),
+                    "bbox": pred_box,
+                    "score": round(pred_score, 3)
+                    })'''
 
                     predictions.append({
                     "image_id": image_name,
