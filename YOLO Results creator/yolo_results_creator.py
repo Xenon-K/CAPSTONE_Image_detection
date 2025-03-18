@@ -201,7 +201,10 @@ data = [
     ('AR@.75', round(metrics[8], 3)),
     ('AR small', round(metrics[9], 3)),
     ('AR medium', round(metrics[10], 3)),
-    ('AR large', round(metrics[11], 3))
+    ('AR large', round(metrics[11], 3)),
+    ('Inference Time', 'fill'),
+    ('Min Memory', 'fill'),
+    ('Peak Memory', 'fill')
 ]
 
 # create results csv
