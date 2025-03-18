@@ -204,7 +204,8 @@ data = [
     ('AR large', round(metrics[11], 3)),
     ('Inference Time', 'fill'),
     ('Min Memory', 'fill'),
-    ('Peak Memory', 'fill')
+    ('Peak Memory', 'fill'),
+    ('Compute Units', 'fill')
 ]
 
 # create results csv
