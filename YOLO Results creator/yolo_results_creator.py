@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import torch.nn.functional
+from pydash import to_lower
 from torchvision.ops import box_convert
 from torchvision.ops import nms
 import json
@@ -126,6 +127,17 @@ if match:
     # index shift
     d_id -= 1
     m_id -= 1
+
+    r_id = to_lower(r_id)
+    if r_id == 'tf':
+        r_id = 'tflite'
+    elif r_id == 'on':
+        r_id = 'onnx'
+    elif r_id == 'qn':
+        r_id = 'QNN'
+    else:
+        print("Invalid runtime code in input filename")
+        exit(-2)
 else:
     print("Output file name error.")
     exit(-1)
