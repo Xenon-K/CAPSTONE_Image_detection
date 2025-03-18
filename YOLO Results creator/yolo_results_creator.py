@@ -1,15 +1,15 @@
 import pandas as pd
-#import qai_hub as hub
 import numpy as np
-#import csv
-#import tensorflow as tf
 import torch.nn.functional
 from torchvision.ops import box_convert
 from torchvision.ops import nms
 import json
-#from scipy.special import softmax
+from pycocotools.coco import COCO
+from pycocotools.cocoeval import COCOeval
+import csv
 import h5py
 import os
+import re
 
 confidence_threshold = 0.3
 iou_threshold=0.45
@@ -92,8 +92,12 @@ def process_h5(filename, confidence_threshold, category_mapping, file_no, idx_co
 # read the image details csv to get original image id and dimensions
 df = pd.read_csv('image_details.csv')
 image_details = df.to_dict(orient='index')
-df2 = pd.read_csv('old2newcoco.csv')
-index_convert = df2.to_dict(orient='index')
+df = pd.read_csv('old2newcoco.csv')
+index_convert = df.to_dict(orient='index')
+df = pd.read_csv('Device.csv')
+device_list = df.to_dict(orient='index')
+df = pd.read_csv('Model.csv')
+model_list = df.to_dict(orient='index')
 
 # Read the class labels for coco
 with open("coco-labels-2014_2017.txt", "r") as f:
@@ -104,6 +108,27 @@ category_mapping = {i: i for i in range(91)}
 directory_path = 'outputs'
 h5_files = [f for f in os.listdir(directory_path) if f.endswith('.h5')]
 h5_files.sort()
+
+h5name = str(h5_files[0])
+result_name = h5name[:10]
+
+pattern = r"D(\d+)-M(\d+)-(\w+)-\d+.h5"
+
+# Search for the pattern in the string
+match = re.search(pattern, h5name)
+
+if match:
+    # Extracting the values
+    d_id = int(match.group(1))  # 01 as integer
+    m_id = int(match.group(2))  # 03 as integer
+    r_id = match.group(3)  # 'tf' as string
+
+    # index shift
+    d_id -= 1
+    m_id -= 1
+else:
+    print("Output file name error.")
+    exit(-1)
 
 # read and process all h5 files
 all_results = []
@@ -120,7 +145,58 @@ for h5_file in h5_files:
         print(f"Error reading {h5_file_path}: {e}")
 
 # Write results to a JSON file (will overwrite if already exists
-with open('results/results.json', 'w') as f:
+result_json = 'results/'+result_name+'-results.json'
+with open(result_json, 'w') as f:
     json.dump(all_results, f)
 
-print("Results saved to results.json")
+print("Results saved to " + result_json)
+
+gt_file = 'results/instances_val2017.json'   # Ground truth annotations
+results_file = result_json  # Predicted results
+
+# Load COCO ground truth data
+coco_gt = COCO(gt_file)
+
+# Load COCO results (predictions)
+coco_dt = coco_gt.loadRes(results_file)
+
+# Initialize the COCOeval object for bbox
+coco_eval = COCOeval(coco_gt, coco_dt, 'bbox')
+
+# Run the evaluation
+coco_eval.evaluate()
+coco_eval.accumulate()
+coco_eval.summarize()
+
+# get metrics in a variable
+metrics = coco_eval.stats
+
+# get data ready for csv
+header = ['Metric', 'Value']
+data = [
+    ('Device', device_list[d_id]['Name']),
+    ('OS', device_list[d_id]['OS']),
+    ('Model', model_list[m_id]['Name']),
+    ('Runtime', r_id),
+    ('AP', round(metrics[0], 3)),
+    ('AP@.5', round(metrics[1], 3)),
+    ('AP@.75', round(metrics[2], 3)),
+    ('AP small', round(metrics[3], 3)),
+    ('AP medium', round(metrics[4], 3)),
+    ('AP large', round(metrics[5], 3)),
+    ('AR', round(metrics[6], 3)),
+    ('AR@.5', round(metrics[7], 3)),
+    ('AR@.75', round(metrics[8], 3)),
+    ('AR small', round(metrics[9], 3)),
+    ('AR medium', round(metrics[10], 3)),
+    ('AR large', round(metrics[11], 3))
+]
+
+# create results csv
+csv_filename = 'results/'+result_name+'-coco_results.csv'
+with open(csv_filename, mode='w', newline='') as file:
+    writer = csv.writer(file)
+    writer.writerow(header)
+    writer.writerows(data)
+
+print(f"COCO evaluation results saved to " + csv_filename)
