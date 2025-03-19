@@ -4,13 +4,13 @@ from PIL import Image
 import csv
 import qai_hub as hub
 
+
 # Folder containing your images
 folder_path = 'val2017'
 
-# Initialize batch size and output CSV file path
-batch_size = 250
+# Initialize output CSV file path and model flag
 csv_file_path = 'image_details.csv'
-resize = 640
+model_flag = 0   # 0 for detr, 1 for yolo
 
 
 # Function to load images in batches
@@ -34,20 +34,29 @@ def load_images_in_batches(folder_path, batch_size):
             for image_file in batch_files:
                 # Open the image and get its original dimensions
                 image_path = os.path.join(folder_path, image_file)
-                with Image.open(image_path) as img:
+                with Image.open(image_path).convert("RGB") as img:
                     original_width, original_height = img.size
                     image_name = os.path.splitext(image_file)[0]
                     image_name = image_name.lstrip('0')
 
                     # Convert image to numpy array and store it in batch
-                    image_resize = img.resize((resize, resize))   # resize for model (detr 480,480; yolo 640,640)
-                    if image_resize.mode != 'RGB':
-                        # If the image is not RGB, convert it to RGB
-                        image_resize = image_resize.convert('RGB')
+                    image_resize = img.resize((resize, resize), resample=Image.Resampling.BILINEAR)   # resize for model (detr 480,480; yolo 640,640)
+
 
                     image_array = np.array(image_resize, dtype=np.float32)
-                    image_array = np.expand_dims(image_array / 255.0, axis=0)
-                    #print(image_array.shape)
+                    extra_suffix = ''
+
+                    if model_flag == 0:
+                        # normalizing for detr
+                        mean = np.array([0.485, 0.456, 0.406])
+                        std = np.array([0.229, 0.224, 0.225])
+                        image_array = ((image_array / 255.0 - mean) / std).astype(np.float32)
+                        extra_suffix = 'norm'
+                    else:
+                        image_array = (image_array / 255.0).astype(np.float32)
+                    #print(image_array.dtype)
+                    image_array = np.expand_dims(image_array, axis=0)
+                    #print(image_array.dtype)
                     image_data_batch.append(image_array)
 
                     # Write the image name and its original dimensions to the CSV
@@ -61,7 +70,7 @@ def load_images_in_batches(folder_path, batch_size):
             )
             batch_number = batch_start // batch_size
             batches = int(5000/batch_size)
-            dataset_name = 'coco_' + str(batch_number) + 'of' + str(batches) + '_' + str(resize)
+            dataset_name = 'coco_' + str(batch_number) + 'of' + str(batches) + '_' + str(resize) + extra_suffix
             print("Uploading", dataset_name)
             hub_dataset = hub.upload_dataset(data, dataset_name)
 
@@ -69,6 +78,12 @@ def load_images_in_batches(folder_path, batch_size):
 
     print("Finished processing all batches!")
 
+if model_flag == 0:
+    batch_size = 500
+    resize = 480
+elif model_flag == 1:
+    batch_size = 250
+    resize = 640
 
 # Call the function to process images
 load_images_in_batches(folder_path, batch_size)
