@@ -19,10 +19,10 @@ yolo = ['dz2roj5g2', 'dn7xxkw67', 'd693pkq07', 'dq9ko0pd7', 'dj7dmljq7',
 detr = ['dj7d63pq9', 'dv91oekn2', 'dn7x4qre2', 'dv91oevn2', 'dj7d63vk9',
         'dz2rn66l7', 'dd9p5zzo7', 'dz2rn6vl7', 'dr2qy6my7', 'dp7ldk5r2']
 
-model = hub.get_model("mq8z0xxvq")
-device = hub.Device("Samsung Galaxy S24 Ultra")
+model = hub.get_model("mn1ekr4rm")
+device = hub.Device("Samsung Galaxy S24")
 
-for i in detr:
+for i in yolo:
     dataset = hub.get_dataset(i)
     print("Dataset information:", dataset)
 

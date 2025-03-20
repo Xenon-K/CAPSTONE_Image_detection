@@ -1,17 +1,17 @@
 import qai_hub as hub
 
-model = hub.get_model("mq8z0xxvq")
-device = hub.Device("Samsung Galaxy S24 Ultra")
+model = hub.get_model("mn1ekr4rm")
+device = hub.Device("Samsung Galaxy S24")
 
 # Profile the previously compiled model
-'''profile_job = hub.submit_profile_job(
+profile_job = hub.submit_profile_job(
     model=model,
     device=device,
 )
-assert isinstance(profile_job, hub.ProfileJob)'''
+assert isinstance(profile_job, hub.ProfileJob)
 
-profile_job = hub.get_job('jpvq26krg')
-
+#profile_job = hub.get_job('jpvq26krg')
+'''
 results = profile_job.download_profile()
 #profile_job.download_results('artifacts')
 
@@ -23,3 +23,4 @@ for keys in exec_summary:
 
 #print(exec_summary.keys())
 #print(exec_summary)
+'''

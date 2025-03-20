@@ -12,8 +12,8 @@ import h5py
 import os
 import re
 
-confidence_threshold = 0.3
-iou_threshold=0.45
+confidence_threshold = 0.0
+iou_threshold=0.6
 batch_size = 250
 convert_flag = True # if output is coco 80 true, if coco 91 false
 
