@@ -7,5 +7,16 @@ os.chdir(search_dir)
 files = filter(os.path.isfile, os.listdir(search_dir))
 files = [os.path.join(search_dir, f) for f in files] # add path to each file
 files.sort(key=lambda x: os.path.getmtime(x))
+device="D47"
+model="M10"
+runtime="tf"
+label=device+"-"+model+"-"+runtime+"-"
+trace=1
+for file in files:
+    if trace < 10:
+        os.rename(file, search_dir + label + "0" + str(trace)+".h5")
+    else:
+        os.rename(file, search_dir + label + str(trace)+".h5")
+    trace+=1
 
 print(files)
