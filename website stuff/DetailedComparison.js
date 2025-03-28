@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import Chart from 'chart.js/auto';
 import './DetailedComparison.css';
-import csusmLogo from './csusm-logo.png'; // Import the CSUSM logo
-import qualcommLogo from './qualcomm-ai-hub-logo.png'; // Import the Qualcomm AI Hub logo
+import csusmLogo from './csusm-logo.png';
+import qualcommLogo from './qualcomm-ai-hub-logo.png';
 
 const DetailedComparisonPage = () => {
   // State for devices, model data and selections.
@@ -17,22 +17,24 @@ const DetailedComparisonPage = () => {
   const [charts, setCharts] = useState([]);
   const [isInitialized, setIsInitialized] = useState(false);
 
-  // Categories for the metrics (order must match the metric array returned by the backend).
+  // Categories for the metrics.  Added AP metrics.
   const categories = [
     'mAP',
     'Inference Time (ms)',
     'Memory Usage (MB)',
     'Compute Units (NPU)',
-    'Runtime (s)',
+    'AP Small',
+    'AP Medium',
+    'AP Large'
   ];
-  // Define if a higher value is better (true) or lower (false) for each category.
-  const isBiggerBetter = [true, false, false, true, false];
-  // Maximum values for the y-axis of each chart.
-  const yAxisMax = [1, 30, 150, 1000, 100];
+  // Define if a higher value is better.  Added to isBiggerBetter
+  const isBiggerBetter = [true, false, false, true, true, true, true];
+  // Maximum values for the y-axis of each chart. Added to yAxisMax
+  const yAxisMax = [1, null, null, null, 1, 1, 1];
 
   // Fetch devices from the backend on component mount.
   useEffect(() => {
-    fetch('your_link/api/devices')
+    fetch('http://192.168.0.181:5000/api/devices')
       .then((res) => res.json())
       .then((data) => {
         setDevices(data);
@@ -47,11 +49,14 @@ const DetailedComparisonPage = () => {
   // Fetch model data for the selected device whenever selectedDevice changes.
   useEffect(() => {
     if (selectedDevice) {
-      fetch(`your_link/api/modeldata?device_id=${selectedDevice}`)
+      fetch(`http://192.168.0.181:5000/api/modeldata?device_id=${selectedDevice}`)
         .then((res) => res.json())
         .then((data) => {
-          setModelData(data.data || {});
-          const models = Object.keys(data.data || {});
+          // Ensure data.data is not undefined before setting state
+          const modelDataFromServer = data.data || {};
+          setModelData(modelDataFromServer);
+
+          const models = Object.keys(modelDataFromServer);
           if (models.length > 0) {
             setSelectedModels((prev) => ({
               model1: models.includes(prev.model1) ? prev.model1 : models[0],
@@ -66,10 +71,18 @@ const DetailedComparisonPage = () => {
   }, [selectedDevice]);
 
   // Helper to get model metrics for the currently selected device.
-  // If data is missing, return an array of zeros.
+  // If data is missing, return an array of zeros.  Adjusted to return 7 zeros.
   const getModelMetrics = (modelName) => {
     const metrics = modelData[modelName];
-    return metrics ? metrics : [0, 0, 0, 0, 0];
+    return metrics ? [
+      metrics[0] || 0,
+      metrics[1] || 0,
+      metrics[2] || 0,
+      metrics[3] || 0,
+      metrics[6] || 0, // AP Small
+      metrics[7] || 0, // AP Medium
+      metrics[8] || 0  // AP Large
+    ] : [0, 0, 0, 0, 0, 0, 0];
   };
 
   // Create and initialize the charts.
@@ -81,7 +94,7 @@ const DetailedComparisonPage = () => {
     categories.forEach((category, index) => {
       const chartDiv = document.createElement('div');
       chartDiv.className = 'chart-container';
-      if (index === 4) {
+      if (index >= 4) { // Apply 'centered-chart' class to AP Small, Medium, Large charts.
         chartDiv.classList.add('centered-chart');
       }
       chartDiv.innerHTML = `<canvas id="chart${index}"></canvas>`;
@@ -152,7 +165,7 @@ const DetailedComparisonPage = () => {
       if (rightEl) rightEl.textContent = `${metrics2[i]}`;
 
       const diffTextEl = document.getElementById(`diffText_${i}`);
-      // If either model is missing data (not present in modelData), display "missing data"
+      // If either model is missing data, display "missing data"
       if (!modelData[models.model1] || !modelData[models.model2]) {
         if (diffTextEl) diffTextEl.textContent = 'missing data';
       } else {
@@ -229,14 +242,33 @@ const DetailedComparisonPage = () => {
 
   useEffect(() => {
     const exploreNowLink = document.querySelector('.cta-button');
+    const handleClick = (event) => {
+      event.preventDefault();
+      window.open('https://aihub.qualcomm.com/models?domain=Computer+Vision&useCase=Object+Detection', '_blank');
+    };
+
     if (exploreNowLink) {
-      exploreNowLink.addEventListener('click', (event) => {
-        event.preventDefault();
-        window.open('https://aihub.qualcomm.com/models?domain=Computer+Vision&useCase=Object+Detection', '_blank');
-      });
+      exploreNowLink.addEventListener('click', handleClick);
     }
-  },);
-  
+
+    // Cleanup to remove the event listener on unmount
+    return () => {
+      if (exploreNowLink) {
+        exploreNowLink.removeEventListener('click', handleClick);
+      }
+    };
+  }, []); // The empty dependency array ensures this runs only once on mount
+
+  const getModelLink = (modelName) => {
+    const modelInfo = modelData[modelName];
+    return modelInfo ? modelInfo[4] : null; // Assuming link is at index 4
+  };
+
+  const getArticleLink = (modelName) => {
+    const modelInfo = modelData[modelName];
+    return modelInfo ? modelInfo[5] : null; // Assuming article link is at index 5
+  };
+
   return (
     <div>
       <div className="container">
@@ -245,6 +277,7 @@ const DetailedComparisonPage = () => {
           <Link to="/" className="logo">Qual Bench AI</Link>
           <div className="nav-links">
             <Link to="/model-comparison">Model Comparisons</Link>
+            <Link to="/detailed-comparison">Detailed Comparison</Link>
           </div>
           <a
             href="https://aihub.qualcomm.com/models?domain=Computer+Vision&useCase=Object+Detection"
@@ -312,6 +345,56 @@ const DetailedComparisonPage = () => {
         <div id="chartsContainer"></div>
       </div>
 
+      {/* Model Links Buttons */}
+      <div className="model-links-container">
+        <div className="model-links-group">
+          <p className="button-title">Try on Qualcomm AI Hub</p>
+          {selectedModels.model1 && (
+            <a
+              href={getModelLink(selectedModels.model1)} // Use anchor tag
+              target="_blank"
+              rel="noopener noreferrer"
+              className="model-link-button" // Keep the class for styling
+            >
+              {selectedModels.model1}
+            </a>
+          )}
+          {selectedModels.model2 && (
+            <a
+              href={getModelLink(selectedModels.model2)}  // Use anchor tag
+              target="_blank"
+              rel="noopener noreferrer"
+              className="model-link-button" // Keep the class for styling
+            >
+              {selectedModels.model2}
+            </a>
+          )}
+        </div>
+        <div className="article-links-group">
+          <p className="button-title">CheckOut PaperWithCode</p>
+          {selectedModels.model1 && (
+            <a
+              href={getModelLink(selectedModels.model1)} // Use anchor tag
+              target="_blank"
+              rel="noopener noreferrer"
+              className="model-link-button"  // Keep the class for styling
+            >
+              {selectedModels.model1}
+            </a>
+          )}
+          {selectedModels.model2 && (
+            <a
+              href={getModelLink(selectedModels.model2)} // Use anchor tag.
+              target="_blank"
+              rel="noopener noreferrer"
+              className="model-link-button"  // Keep the class for styling
+            >
+              {selectedModels.model2}
+            </a>
+          )}
+        </div>
+      </div>
+
       {/* Numerical Comparison Table */}
       <div className="container-detailed">
         <div id="detailsSection">
@@ -355,3 +438,4 @@ const DetailedComparisonPage = () => {
 };
 
 export default DetailedComparisonPage;
+
