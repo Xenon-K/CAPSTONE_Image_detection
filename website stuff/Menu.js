@@ -44,7 +44,8 @@ function Menu() {
         <div className="text-content">
           <h2>Compare AI Models with Interactive Graphs</h2>
           <p>
-            Explore our platform’s ability to visually compare AI models using comprehensive graphs. Select models and metrics to gain insights into performance differences, enhancing your decision-making process.
+            Explore our platform’s ability to visually compare AI models using comprehensive graphs.
+            Select models and metrics to gain insights into performance differences, enhancing your decision-making process.
           </p>
           <div className="metrics">
             <p>Mean Average Precision (MAP)</p>
@@ -52,11 +53,16 @@ function Menu() {
             <p>Estimated Peak Memory Usage</p>
             <p>Compute Units</p>
           </div>
+          {/* New Methodology Button */}
+          <Link to="/methodology" className="cta-button" style={{ marginTop: "15px", display: "inline-block" }}>
+            View Methodology
+          </Link>
         </div>
         <div className="image-content">
           <img src={exampleImage} alt="AI Model Comparison Graphs" />
         </div>
       </div>
+
 
       {/* Footer */}
       <div className="footer">
