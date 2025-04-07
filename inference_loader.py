@@ -6,9 +6,6 @@ import qai_hub as hub
 #dataset = hub.get_datasets(limit=30)
 #print("Dataset information:", dataset)
 
-# detr coco dataset (1, 480,480, 3) float 32
-'''coco = ['dp7035le7', 'd67oog6q7', 'dk7g4en07', 'dv91dn189', 'dv955r3m9',
-        'dp7lomyw7','dq9ko0w57', 'dj7dmlk87', 'd693pkwl7', 'dr2qzo362']'''
 
 # yolo (1, 640, 640, 3) float 32
 yolo = ['dz2roj5g2', 'dn7xxkw67', 'd693pkq07', 'dq9ko0pd7', 'dj7dmljq7',
@@ -22,7 +19,9 @@ detr = ['dj7d63pq9', 'dv91oekn2', 'dn7x4qre2', 'dv91oevn2', 'dj7d63vk9',
 model = hub.get_model("mn1ekr4rm")
 device = hub.Device("Samsung Galaxy S24")
 
-for i in yolo:
+job_list = []
+
+for i in detr:
     dataset = hub.get_dataset(i)
     print("Dataset information:", dataset)
 
@@ -32,3 +31,8 @@ for i in yolo:
         device=device,
         inputs=dataset,
     )
+
+    job_list.append(inference_job)
+
+for jobs in job_list:
+    jobs.download_results('toSort')
