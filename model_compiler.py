@@ -3,18 +3,30 @@ import re
 import csv
 
 # Device name (customize this)
-device = "Samsung Galaxy S24"
-
+device = "Snapdragon 8cx Gen 3 CRD"
+runtime = 'onnx'
 # Sanitize device name for safe file naming
 safe_device_name = device.replace(" ", "_")
 csv_file = f"models_{safe_device_name}.csv"
 
 # Define your export commands
 commands = [
-    fr'python -m qai_hub_models.models.detr_resnet101.export --device "{device}" --target-runtime tflite --height 480 --width 480 --skip-profiling --skip-inferencing',
-    fr'python -m qai_hub_models.models.detr_resnet101_dc5.export --device "{device}" --target-runtime tflite --height 480 --width 480 --skip-profiling --skip-inferencing',
-    fr'python -m qai_hub_models.models.detr_resnet50.export --device "{device}" --target-runtime tflite --height 480 --width 480 --skip-profiling --skip-inferencing',
-    fr'python -m qai_hub_models.models.detr_resnet50_dc5.export --device "{device}" --target-runtime tflite --height 480 --width 480 --skip-profiling --skip-inferencing'
+    fr'python -m qai_hub_models.models.conditional_detr_resnet50.export --device "{device}" --target-runtime {runtime} --height 480 --width 480 --skip-profiling --skip-inferencing',
+    fr'python -m qai_hub_models.models.detr_resnet101.export --device "{device}" --target-runtime {runtime} --height 480 --width 480 --skip-profiling --skip-inferencing',
+    fr'python -m qai_hub_models.models.detr_resnet101_dc5.export --device "{device}" --target-runtime {runtime} --height 480 --width 480 --skip-profiling --skip-inferencing',
+    fr'python -m qai_hub_models.models.detr_resnet50.export --device "{device}" --target-runtime {runtime} --height 480 --width 480 --skip-profiling --skip-inferencing',
+    fr'python -m qai_hub_models.models.detr_resnet50_dc5.export --device "{device}" --target-runtime {runtime} --height 480 --width 480 --skip-profiling --skip-inferencing',
+    fr'python -m qai_hub_models.models.yolov3.export --device "{device}" --target-runtime {runtime} --height 640 --width 640 --skip-profiling --skip-inferencing',
+    fr'python -m qai_hub_models.models.yolov5.export --device "{device}" --target-runtime {runtime} --height 640 --width 640 --skip-profiling --skip-inferencing',
+    fr'python -m qai_hub_models.models.yolov6.export --device "{device}" --target-runtime {runtime} --height 640 --width 640 --skip-profiling --skip-inferencing',
+    fr'python -m qai_hub_models.models.yolov7.export --device "{device}" --target-runtime {runtime} --height 640 --width 640 --skip-profiling --skip-inferencing',
+    fr'python -m qai_hub_models.models.yolov8_det.export --device "{device}" --target-runtime {runtime} --height 640 --width 640 --skip-profiling --skip-inferencing',
+    fr'python -m qai_hub_models.models.yolov10_det.export --device "{device}" --target-runtime {runtime} --height 640 --width 640 --skip-profiling --skip-inferencing',
+    fr'python -m qai_hub_models.models.yolov11_det.export --device "{device}" --target-runtime {runtime} --height 640 --width 640 --skip-profiling --skip-inferencing',
+    fr'python -m qai_hub_models.models.yolov7_quantized.export --device "{device}" --target-runtime {runtime} --height 640 --width 640 --skip-profiling --skip-inferencing',
+    fr'python -m qai_hub_models.models.yolov8_det_quantized.export --device "{device}" --target-runtime {runtime} --height 640 --width 640 --skip-profiling --skip-inferencing',
+    fr'python -m qai_hub_models.models.yolov11_det_quantized.export --device "{device}" --target-runtime {runtime} --height 640 --width 640 --skip-profiling --skip-inferencing',
+    fr'python -m qai_hub_models.models.rtmdet.export --device "{device}" --target-runtime {runtime} --height 480 --width 480 --skip-profiling --skip-inferencing'
 ]
 
 # Regex to extract model name and hub ID
@@ -40,7 +52,7 @@ with open(csv_file, mode='a', newline='') as file:
 
         all_lines = []
         for line in process.stdout:
-            #print(line, end="")  # Real-time print
+            print(line, end="")  # Real-time print
             all_lines.append(line.strip())
 
         process.wait()
