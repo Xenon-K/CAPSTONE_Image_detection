@@ -1,61 +1,61 @@
-Code,Name,OS
-D01,SA7255P ADP,Android 14
-D02,SA8255 (Proxy),Android 13
-D03,SA8295P ADP,Android 14
-D04,SA8650 (Proxy),Android 13
-D05,SA8775 (Proxy),Android 13
-D06,SA8775P ADP,Android 14
-D07,Snapdragon 8cx Gen 3 CRD,Windows 11
-D08,Snapdragon X Elite CRD,Windows 11
-D09,Snapdragon X Plus 8-Core CRD,Windows 11
-D10,QCS6490 (Proxy),Android 12
-D11,QCS8250 (Proxy),Android 12
-D12,QCS8275 (Proxy),Android 14
-D13,QCS8550 (Proxy),Android 12
-D14,QCS9075 (Proxy),Android 14
-D15,RB3 Gen 2 (Proxy),Android 12
-D16,RB5 (Proxy),Android 12
-D17,Google Pixel 3,Android 10
-D18,Google Pixel 3 (Family),Android 10
-D19,Google Pixel 3 XL,Android 10
-D20,Google Pixel 3a,Android 10
-D21,Google Pixel 3a XL,Android 12
-D22,Google Pixel 4,Android 10
-D23,Google Pixel 4,Android 11
-D24,Google Pixel 4a,Android 11
-D25,Google Pixel 4a,Android 12
-D26,Google Pixel 5,Android 11
-D27,Google Pixel 5,Android 12
-D28,Google Pixel 5 (Family),Android 12
-D29,Google Pixel 5a 5G,Android 12
-D30,Samsung Galaxy A73 5G,Android 12
-D31,Samsung Galaxy S21,Android 11
-D32,Samsung Galaxy S21,Android 12
-D33,Samsung Galaxy S21 (Family),Android 11
-D34,Samsung Galaxy S21 (Family),Android 12
-D35,Samsung Galaxy S21 Ultra,Android 11
-D36,Samsung Galaxy S21 Ultra,Android 12
-D37,Samsung Galaxy S21+,Android 11
-D38,Samsung Galaxy S22 (Family),Android 12
-D39,Samsung Galaxy S22 5G,Android 12
-D40,Samsung Galaxy S22 5G,Android 13
-D41,Samsung Galaxy S22 Ultra 5G,Android 12
-D42,Samsung Galaxy S22+ 5G,Android 12
-D43,Samsung Galaxy S23,Android 13
-D44,Samsung Galaxy S23 (Family),Android 13
-D45,Samsung Galaxy S23 Ultra,Android 13
-D46,Samsung Galaxy S23+,Android 13
-D47,Samsung Galaxy S24,Android 14
-D48,Samsung Galaxy S24 (Family),Android 14
-D49,Samsung Galaxy S24 Ultra,Android 14
-D50,Samsung Galaxy S24+,Android 14
-D51,Samsung Galaxy Tab A8 (2021),Android 11
-D52,Samsung Galaxy Tab S7,Android 11
-D53,Samsung Galaxy Tab S8,Android 12
-D54,Snapdragon 8 Elite QRD,Android 15
-D55,Xiaomi 12,Android 12
-D56,Xiaomi 12 (Family),Android 12
-D57,Xiaomi 12 Pro,Android 12
-D58,Xiaomi Redmi Note 10 5G,Android 11
-D59,QCS8450 (Proxy),Android 13
-D60,XR2 Gen 2 (Proxy),Android 13
+Code,Name,Chipset,OS
+D01,SA7255P ADP,Qualcomm® SA7255P,Android 14
+D02,SA8255 (Proxy),Qualcomm® SA8255P,Android 13
+D03,SA8295P ADP,Qualcomm® SA8295P,Android 14
+D04,SA8650 (Proxy),Qualcomm® SA8650P,Android 13
+D05,SA8775 (Proxy),Qualcomm® SA8775P,Android 13
+D06,SA8775P ADP,Qualcomm® SA8775P,Android 14
+D07,Snapdragon 8cx Gen 3 CRD,Snapdragon® 8cx Gen 3 | SC8280X,Windows 11
+D08,Snapdragon X Elite CRD,Snapdragon® X Elite | SC8380XP,Windows 11
+D09,Snapdragon X Plus 8-Core CRD,Snapdragon® X Plus 8-Core | SC8340XP,Windows 11
+D10,QCS6490 (Proxy),Qualcomm® QCS6490,Android 12
+D11,QCS8250 (Proxy),Qualcomm® QCS8250,Android 12
+D12,QCS8275 (Proxy),Qualcomm® QCS8275,Android 14
+D13,QCS8550 (Proxy),Qualcomm® QCS8550,Android 12
+D14,QCS9075 (Proxy),Qualcomm® QCS9075,Android 14
+D15,RB3 Gen 2 (Proxy),Qualcomm® QCS6490,Android 12
+D16,RB5 (Proxy),Qualcomm® QCS8250,Android 12
+D17,Google Pixel 3,Snapdragon® 845 | SDM845,Android 10
+D18,Google Pixel 3 (Family),Snapdragon® 845 | SDM845,Android 10
+D19,Google Pixel 3 XL,Snapdragon® 845 | SDM845,Android 10
+D20,Google Pixel 3a,Snapdragon® 670 | SDM670,Android 10
+D21,Google Pixel 3a XL,Snapdragon® 670 | SDM670,Android 12
+D22,Google Pixel 4,Snapdragon® 855 | SM8150,Android 10
+D23,Google Pixel 4,Snapdragon® 855 | SM8150,Android 11
+D24,Google Pixel 4a,Snapdragon® 730G | SM7150-AB,Android 11
+D25,Google Pixel 4a,Snapdragon® 730G | SM7150-AB,Android 12
+D26,Google Pixel 5,Snapdragon® 765G | SM7250,Android 11
+D27,Google Pixel 5,Snapdragon® 765G | SM7250,Android 12
+D28,Google Pixel 5 (Family),Snapdragon® 765G | SM7250,Android 12
+D29,Google Pixel 5a 5G,Snapdragon® 765G | SM7250,Android 12
+D30,Samsung Galaxy A73 5G,Snapdragon® 778G | SM7325,Android 12
+D31,Samsung Galaxy S21,Snapdragon® 888 | SM8350,Android 11
+D32,Samsung Galaxy S21,Snapdragon® 888 | SM8350,Android 12
+D33,Samsung Galaxy S21 (Family),Snapdragon® 888 | SM8350,Android 11
+D34,Samsung Galaxy S21 (Family),Snapdragon® 888 | SM8350,Android 12
+D35,Samsung Galaxy S21 Ultra,Snapdragon® 888 | SM8350,Android 11
+D36,Samsung Galaxy S21 Ultra,Snapdragon® 888 | SM8350,Android 12
+D37,Samsung Galaxy S21+,Snapdragon® 888 | SM8350,Android 11
+D38,Samsung Galaxy S22 (Family),Snapdragon® 8 Gen 1 | SM8450,Android 12
+D39,Samsung Galaxy S22 5G,Snapdragon® 8 Gen 1 | SM8450,Android 12
+D40,Samsung Galaxy S22 5G,Snapdragon® 8 Gen 1 | SM8450,Android 13
+D41,Samsung Galaxy S22 Ultra 5G,Snapdragon® 8 Gen 1 | SM8450,Android 12
+D42,Samsung Galaxy S22+ 5G,Snapdragon® 8 Gen 1 | SM8450,Android 12
+D43,Samsung Galaxy S23,Snapdragon® 8 Gen 2 | SM8550,Android 13
+D44,Samsung Galaxy S23 (Family),Snapdragon® 8 Gen 2 | SM8550,Android 13
+D45,Samsung Galaxy S23 Ultra,Snapdragon® 8 Gen 2 | SM8550,Android 13
+D46,Samsung Galaxy S23+,Snapdragon® 8 Gen 2 | SM8550,Android 13
+D47,Samsung Galaxy S24,Snapdragon® 8 Gen 3 | SM8650,Android 14
+D48,Samsung Galaxy S24 (Family),Snapdragon® 8 Gen 3 | SM8650,Android 14
+D49,Samsung Galaxy S24 Ultra,Snapdragon® 8 Gen 3 | SM8650,Android 14
+D50,Samsung Galaxy S24+,Snapdragon® 8 Gen 3 | SM8650,Android 14
+D51,Samsung Galaxy Tab A8 (2021),Snapdragon® 429 | SDM429,Android 11
+D52,Samsung Galaxy Tab S7,Snapdragon® 865+ | SM8250-AB,Android 11
+D53,Samsung Galaxy Tab S8,Snapdragon® 8 Gen 1 | SM8450,Android 12
+D54,Snapdragon 8 Elite QRD,Snapdragon® 8 Elite | SM8750,Android 15
+D55,Xiaomi 12,Snapdragon® 8 Gen 1 | SM8450,Android 12
+D56,Xiaomi 12 (Family),Snapdragon® 8 Gen 1 | SM8450,Android 12
+D57,Xiaomi 12 Pro,Snapdragon® 8 Gen 1 | SM8450,Android 12
+D58,Xiaomi Redmi Note 10 5G,Snapdragon® 678 | SM6150-AC,Android 11
+D59,QCS8450 (Proxy),Qualcomm® QCS8450,Android 13
+D60,XR2 Gen 2 (Proxy),Qualcomm® QCS8450,Android 13
