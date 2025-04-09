@@ -12,6 +12,10 @@ import csv
 import h5py
 import os
 import re
+from typing import Any
+from qai_hub_models.configs.perf_yaml import bytes_to_mb
+from collections import Counter
+from qai_hub_models.utils.printing import print_profile_metrics_from_job
 
 
 
@@ -21,16 +25,20 @@ yolo = ['dz2roj5g2', 'dn7xxkw67', 'd693pkq07', 'dq9ko0pd7', 'dj7dmljq7',
          'd6780vxl2','dp7lomm47', 'dn7xxkke7', 'd6780vvl2', 'dp7ld1142',
          'dz7zzoo57','d09ywyy17', 'dv91ojjn2', 'd67oqkz69', 'dn7x4y5e2']
 
+yolo2 = ['dz2roj5g2', 'dn7xxkw67']
+
 Device = 'D49'
 Model = 'M19'
 Runtime = 'tf'
+model_id = "mq9wy6lrm"
+device_id = "Samsung Galaxy S24 Ultra"
 
-model = hub.get_model("mnwgj23wq")
-device = hub.Device("Samsung Galaxy S24 Ultra")
+model = hub.get_model(model_id)
+device = hub.Device(device_id)
 
 job_list = []
 
-for i in yolo:
+for i in yolo2:
     dataset = hub.get_dataset(i)
     print("Dataset information:", dataset)
 
@@ -238,10 +246,41 @@ coco_eval.summarize()
 # get metrics in a variable
 metrics = coco_eval.stats
 
+model = hub.get_model(model_id)
+device = hub.Device(device_id)
+
+# Profile the previously compiled model
+profile_job = hub.submit_profile_job(
+    model=model,
+    device=device,
+)
+
+results = profile_job.download_profile()
+#profile_job.download_results('artifacts')
+
+exec_details = results['execution_detail']
+exec_summary = results['execution_summary']
+
+profile_data: dict[str, Any] = profile_job.download_profile()  # type: ignore
+print_profile_metrics_from_job(profile_job, profile_data)
+
+inference_time = exec_summary["estimated_inference_time"]/1000
+peak_memory_bytes = exec_summary["inference_memory_peak_range"]
+mem_min = bytes_to_mb(peak_memory_bytes[0])
+mem_max = bytes_to_mb(peak_memory_bytes[1])
+
+compute_unit_counts = Counter(
+        [op.get("compute_unit", "UNK") for op in profile_data["execution_detail"]]
+    )
+gpu_value = compute_unit_counts.get("GPU", 0)
+cpu_value = compute_unit_counts.get("CPU", 0)
+npu_value = compute_unit_counts.get("NPU", 0)
+
 # get data ready for csv
 header = ['Metric', 'Value']
 data = [
     ('Device', device_list[d_id]['Name']),
+    ('Chipset', device_list[d_id]['Chipset']),
     ('OS', device_list[d_id]['OS']),
     ('Model', model_list[m_id]['Name']),
     ('Runtime', r_id),
@@ -257,10 +296,12 @@ data = [
     ('AR small', round(metrics[9], 3)),
     ('AR medium', round(metrics[10], 3)),
     ('AR large', round(metrics[11], 3)),
-    ('Inference Time', 'fill'),
-    ('Min Memory', 'fill'),
-    ('Peak Memory', 'fill'),
-    ('Compute Units', 'fill')
+    ('Inference Time', inference_time),
+    ('Min Memory', mem_min),
+    ('Peak Memory', mem_max),
+    ('Compute Units NPU', npu_value),
+    ('Compute Units GPU', gpu_value),
+    ('Compute Units CPU', cpu_value)
 ]
 
 # create results csv

@@ -28,6 +28,7 @@ print_profile_metrics_from_job(profile_job, profile_data)
 for keys in exec_summary:
     print(keys, ":", exec_summary[keys])
 
+inference_time = exec_summary["estimated_inference_time"]/1000
 peak_memory_bytes = exec_summary["inference_memory_peak_range"]
 mem_min = bytes_to_mb(peak_memory_bytes[0])
 mem_max = bytes_to_mb(peak_memory_bytes[1])
