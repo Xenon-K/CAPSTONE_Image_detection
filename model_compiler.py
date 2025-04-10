@@ -7,7 +7,7 @@ device = "Snapdragon 8cx Gen 3 CRD"
 runtime = 'onnx'
 # Sanitize device name for safe file naming
 safe_device_name = device.replace(" ", "_")
-csv_file = f"models_{safe_device_name}.csv"
+csv_file = f"models_{safe_device_name}_{runtime}.csv"
 
 # Define your export commands
 commands = [
@@ -25,8 +25,8 @@ commands = [
     fr'python -m qai_hub_models.models.yolov11_det.export --device "{device}" --target-runtime {runtime} --height 640 --width 640 --skip-profiling --skip-inferencing',
     fr'python -m qai_hub_models.models.yolov7_quantized.export --device "{device}" --target-runtime {runtime} --height 640 --width 640 --skip-profiling --skip-inferencing',
     fr'python -m qai_hub_models.models.yolov8_det_quantized.export --device "{device}" --target-runtime {runtime} --height 640 --width 640 --skip-profiling --skip-inferencing',
-    fr'python -m qai_hub_models.models.yolov11_det_quantized.export --device "{device}" --target-runtime {runtime} --height 640 --width 640 --skip-profiling --skip-inferencing',
-    fr'python -m qai_hub_models.models.rtmdet.export --device "{device}" --target-runtime {runtime} --height 480 --width 480 --skip-profiling --skip-inferencing'
+    fr'python -m qai_hub_models.models.yolov11_det_quantized.export --device "{device}" --target-runtime {runtime} --height 640 --width 640 --skip-profiling --skip-inferencing'
+    #fr'python -m qai_hub_models.models.rtmdet.export --device "{device}" --target-runtime {runtime} --height 640 --width 640 --skip-profiling --skip-inferencing'
 ]
 
 # Regex to extract model name and hub ID
