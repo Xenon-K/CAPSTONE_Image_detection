@@ -304,11 +304,30 @@ data = [
     ('Compute Units CPU', cpu_value)
 ]
 
+#make new directory in completed
+os.makedirs(os.getcwd()+"/completed"+"/"+result_name+"/")#make output directory
+
 # create results csv
-csv_filename = 'results/'+result_name+'-coco_results.csv'
+csv_filename = '/results/'+result_name+'-coco_results.csv'
 with open(csv_filename, mode='w', newline='') as file:
     writer = csv.writer(file)
     writer.writerow(header)
     writer.writerows(data)
+
+    #move files into a nice new folder in completed
+folder_path = 'outputs'
+files = [f for f in os.listdir(folder_path) if os.path.isfile(os.path.join(folder_path, f))]
+# Get the creation time for each file and sort by it
+files = [(f, os.path.getctime(os.path.join(folder_path, f))) for f in files]
+files.sort(key=lambda x: x[1])
+
+for index, (file_name, _) in enumerate(files, start=1):
+    file_extension = os.path.splitext(file_name)[1]  # Get the file extension
+    # Construct the full file path
+    old_file_path = os.path.join(folder_path, file_name)
+    new_file_path = os.path.join("/completed"+"/"+result_name+"/", file_name)
+
+    # Rename the file
+    os.rename(old_file_path, new_file_path)
 
 print(f"COCO evaluation results saved to " + csv_filename)
