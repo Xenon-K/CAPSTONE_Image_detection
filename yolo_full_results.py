@@ -328,5 +328,5 @@ for index, (file_name, _) in enumerate(files, start=1):
     # Rename the file
     os.rename(old_file_path, new_file_path)
 
-    os.rename(os.getcwd()+'/results/'+result_name+'-results.json', os.getcwd()+"/completed"+"/"+result_name+"/"+result_name+'-results.json')
+os.rename(os.getcwd()+'/results/'+result_name+'-results.json', os.getcwd()+"/completed"+"/"+result_name+"/"+result_name+'-results.json')
 print(f"COCO evaluation results saved to " + csv_filename)
