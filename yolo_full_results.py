@@ -51,8 +51,15 @@ for i in yolo2:
 
     job_list.append(inference_job)
 
+# Profile the previously compiled model
+profile_job = hub.submit_profile_job(
+    model=model,
+    device=device,
+)
+
 for jobs in job_list:
     jobs.download_results('toSort')
+results = profile_job.download_profile()
 
 folder_path = 'toSort'
 
@@ -246,16 +253,7 @@ coco_eval.summarize()
 # get metrics in a variable
 metrics = coco_eval.stats
 
-model = hub.get_model(model_id)
-device = hub.Device(device_id)
 
-# Profile the previously compiled model
-profile_job = hub.submit_profile_job(
-    model=model,
-    device=device,
-)
-
-results = profile_job.download_profile()
 #profile_job.download_results('artifacts')
 
 exec_details = results['execution_detail']

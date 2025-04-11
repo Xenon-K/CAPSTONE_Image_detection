@@ -21,11 +21,11 @@ from scipy.special import softmax
 detr = ['dj7d63pq9', 'dv91oekn2', 'dn7x4qre2', 'dv91oevn2', 'dj7d63vk9',
         'dz2rn66l7', 'dd9p5zzo7', 'dz2rn6vl7', 'dr2qy6my7', 'dp7ldk5r2']
 
-Device = 'D49'
-Model = 'M19'
+Device = 'D44'
+Model = 'M01'
 Runtime = 'tf'
-model_id = "mq9wy6lrm"
-device_id = "Samsung Galaxy S24 Ultra"
+model_id = "mqk3zl2wn"
+device_id = "Samsung Galaxy S23 (Family)"
 
 model = hub.get_model(model_id)
 device = hub.Device(device_id)
@@ -45,8 +45,17 @@ for i in detr:
 
     job_list.append(inference_job)
 
+# Profile the previously compiled model
+profile_job = hub.submit_profile_job(
+    model=model,
+    device=device,
+)
+
+
 for jobs in job_list:
     jobs.download_results('toSort')
+
+results = profile_job.download_profile()
 
 folder_path = 'toSort'
 
@@ -70,9 +79,7 @@ for index, (file_name, _) in enumerate(files, start=1):
     os.rename(old_file_path, new_file_path)
 
 confidence_threshold = 0.0
-iou_threshold=0.6
-batch_size = 250
-convert_flag = True # if output is coco 80 true, if coco 91 false
+#batch_size = 500
 
 def process_h5(filename, confidence_threshold, category_mapping, file_no):
     predictions = []
@@ -201,7 +208,7 @@ for h5_file in h5_files:
     try:
         # Read data from each h5 file and get results
         print("reading file: " + h5_file)
-        file_predictions = process_h5(h5_file_path, confidence_threshold, category_mapping, file_count, index_convert)
+        file_predictions = process_h5(h5_file_path, confidence_threshold, category_mapping, file_count)
         all_results.extend(file_predictions)
         file_count += 1
     except Exception as e:
@@ -234,16 +241,7 @@ coco_eval.summarize()
 # get metrics in a variable
 metrics = coco_eval.stats
 
-model = hub.get_model(model_id)
-device = hub.Device(device_id)
 
-# Profile the previously compiled model
-profile_job = hub.submit_profile_job(
-    model=model,
-    device=device,
-)
-
-results = profile_job.download_profile()
 #profile_job.download_results('artifacts')
 
 exec_details = results['execution_detail']
