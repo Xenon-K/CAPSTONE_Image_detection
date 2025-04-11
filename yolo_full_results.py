@@ -308,7 +308,7 @@ data = [
 os.makedirs(os.getcwd()+"/completed"+"/"+result_name+"/")#make output directory
 
 # create results csv
-csv_filename = '/results/'+result_name+'-coco_results.csv'
+csv_filename = os.getcwd()+"/completed"+"/"+result_name+"/"+result_name+'-coco_results.csv'
 with open(csv_filename, mode='w', newline='') as file:
     writer = csv.writer(file)
     writer.writerow(header)
@@ -325,9 +325,10 @@ for index, (file_name, _) in enumerate(files, start=1):
     file_extension = os.path.splitext(file_name)[1]  # Get the file extension
     # Construct the full file path
     old_file_path = os.path.join(folder_path, file_name)
-    new_file_path = os.path.join("/completed"+"/"+result_name+"/", file_name)
+    new_file_path = os.path.join(os.getcwd()+"/completed"+"/"+result_name+"/", file_name)
 
     # Rename the file
     os.rename(old_file_path, new_file_path)
 
+    os.rename(os.getcwd()+'/results/'+result_name+'-results.json', os.getcwd()+"/completed"+"/"+result_name+"/"+result_name+'-results.json')
 print(f"COCO evaluation results saved to " + csv_filename)
