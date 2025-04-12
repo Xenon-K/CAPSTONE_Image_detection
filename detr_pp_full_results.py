@@ -21,7 +21,6 @@ from scipy.special import softmax
 detr = ['dj7d63pq9', 'dv91oekn2', 'dn7x4qre2', 'dv91oevn2', 'dj7d63vk9',
         'dz2rn66l7', 'dd9p5zzo7', 'dz2rn6vl7', 'dr2qy6my7', 'dp7ldk5r2']
 
-confidence_threshold = 0.0
 Device = 'D44'
 Model = 'M02'
 Runtime = 'tf'
@@ -79,6 +78,8 @@ for index, (file_name, _) in enumerate(files, start=1):
     # Rename the file
     os.rename(old_file_path, new_file_path)
 
+confidence_threshold = 0.0
+#batch_size = 500
 
 def process_h5(filename, confidence_threshold, category_mapping, file_no):
     predictions = []
@@ -95,9 +96,11 @@ def process_h5(filename, confidence_threshold, category_mapping, file_no):
 
             # extract data from h5 file
             batch = 'batch_' + str(i)
-            out = torch.tensor(np.array((file['data']['0'][batch])))
-            bboxes = torch.tensor(np.array((file['data']['1'][batch])))
-            scores = torch.tensor(softmax(out.numpy(), -1))  # softmax the logits
+
+            bboxes = torch.tensor(np.array((file['data']['0'][batch])))
+            scores = torch.tensor(np.array((file['data']['1'][batch])))
+            classes = torch.tensor(np.array((file['data']['2'][batch])))
+
 
             # check each prediction
             for j in range(len(scores[0])):
@@ -105,29 +108,20 @@ def process_h5(filename, confidence_threshold, category_mapping, file_no):
 
                 # if prediction meets confidence threshold get data and save to put in results json
                 if score.max() > confidence_threshold:
-                    pred_class = np.argsort(score, axis=0)[-1:].item()  # Get class with highest score
-                    pred_score = score.max().item()
-                    if category_mapping.get(pred_class, 0) == 0:
-                        pred_class = np.argsort(score, axis=0)[-2].item()
-                        sorted_indices = np.argsort(score, axis=0)
-                        # Get the second highest index (second to last in sorted order)
-                        second_pred_class = sorted_indices[-2].item()
-                        # Get the second highest score
-                        pred_score = score[second_pred_class].item()
-                    #print("Class ", pred_class)
-                      # Max confidence score
-                    #print("Score ", pred_score)
+                    pred_class=classes[0][j].item()
+                    pred_score = score.item()
                     pred_box = bboxes[0][j].tolist()  # The bounding box
 
                     # Convert box from cxcywh format (detr) to xywh (coco)
-                    pred_box = box_convert(torch.tensor(pred_box), 'cxcywh', 'xywh').tolist()
+                    pred_box = box_convert(torch.tensor(pred_box), 'xyxy', 'xywh').tolist()
 
+                    xscale = image_width / 480
+                    yscale = image_height / 480
                     # After converting to xywh, scale to original dimensions
-                    pred_box[0] = round(pred_box[0] * image_width, 2)  # x1 * image_width
-                    pred_box[1] = round(pred_box[1] * image_height, 2)  # y1 * image_height
-                    pred_box[2] = round(pred_box[2] * image_width, 2)  # x2 * image_width
-                    pred_box[3] = round(pred_box[3] * image_height, 2)  # y2 * image_height
-
+                    pred_box[0] = round(pred_box[0] * xscale, 2)  # x1 * image_width
+                    pred_box[1] = round(pred_box[1] * yscale, 2)  # y1 * image_height
+                    pred_box[2] = round(pred_box[2] * xscale, 2)  # x2 * image_width
+                    pred_box[3] = round(pred_box[3] * yscale, 2)  # y2 * image_height
 
                     # Store the result in list to store in json later
                     predictions.append({

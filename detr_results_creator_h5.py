@@ -96,7 +96,7 @@ with open("coco-labels-2014_2017.txt", "r") as f:
 category_mapping = {i: i for i in range(91)}
 
 # get all h5 files in directory
-directory_path = 'DETR results creator/outputs'
+directory_path = 'outputs'
 h5_files = [f for f in os.listdir(directory_path) if f.endswith('.h5')]
 h5_files.sort()
 

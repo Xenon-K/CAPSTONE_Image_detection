@@ -25,20 +25,19 @@ yolo = ['dz2roj5g2', 'dn7xxkw67', 'd693pkq07', 'dq9ko0pd7', 'dj7dmljq7',
          'd6780vxl2','dp7lomm47', 'dn7xxkke7', 'd6780vvl2', 'dp7ld1142',
          'dz7zzoo57','d09ywyy17', 'dv91ojjn2', 'd67oqkz69', 'dn7x4y5e2']
 
-yolo2 = ['dz2roj5g2', 'dn7xxkw67']
 
-Device = 'D49'
-Model = 'M19'
+Device = 'D44'
+Model = 'M11'
 Runtime = 'tf'
-model_id = "mq9wy6lrm"
-device_id = "Samsung Galaxy S24 Ultra"
+model_id = "mqed0o57m"
+device_id = "Samsung Galaxy S23 (Family)"
 
 model = hub.get_model(model_id)
 device = hub.Device(device_id)
 
 job_list = []
 
-for i in yolo2:
+for i in yolo:
     dataset = hub.get_dataset(i)
     print("Dataset information:", dataset)
 
