@@ -1,0 +1,15 @@
+Model Name,Hub Model ID
+conditional_detr_resnet50,mqed0x4vm
+detr_resnet101,mn0lwxk8n
+detr_resnet101_dc5,mq2lk4gwn
+detr_resnet50,mq8eok7jq
+detr_resnet50_dc5,mmdg5ywwm
+yolov3,mqed0xgvm
+yolov5,mq2lk4ywn
+yolov6,mq8eokpjq
+yolov7,mmdg5yxwm
+yolov8_det,mqk3zkyzn
+yolov10_det,mnl3pvjwn
+yolov11_det,mnoew3jvq
+yolov7_quantized,mm54ldk2n
+yolov8_det_quantized,mn1e4z18m

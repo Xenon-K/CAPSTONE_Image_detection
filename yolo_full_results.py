@@ -20,17 +20,17 @@ from qai_hub_models.utils.printing import print_profile_metrics_from_job
 
 
 # yolo (1, 640, 640, 3) float 32
-yolo = ['dz2roj5g2', 'dn7xxkw67', 'd693pkq07', 'dq9ko0pd7', 'dj7dmljq7',
-        'dk7g4eje7','dn7xxkve7', 'dv91dn4n9', 'dw26yljz9', 'dj7dmlxk7',
-         'd6780vxl2','dp7lomm47', 'dn7xxkke7', 'd6780vvl2', 'dp7ld1142',
-         'dz7zzoo57','d09ywyy17', 'dv91ojjn2', 'd67oqkz69', 'dn7x4y5e2']
+yolo = ['dv9516pz2', 'do7ml3g39', 'dp7lg36j2', 'd67ox3lg7', 'dn7xzeor9',
+        'dr2qq30v2', 'do7ml34l9', 'dr9wm3lo2', 'dp7lg3e12', 'd67jw4mm2',
+        'dj7d0neq9', 'dq9kr3md7', 'dz2r534g7', 'dw264e1g9', 'dj7d0nvq9',
+        'dv95164e2', 'dq9kr3xd7', 'dw264ewg9', 'd67jw4lm2', 'dv9516je2']
 
 
-Device = 'D44'
-Model = 'M11'
+Device = 'D48'
+Model = 'M12'
 Runtime = 'tf'
-model_id = "mqed0o57m"
-device_id = "Samsung Galaxy S23 (Family)"
+model_id = "mnoew3jvq"
+device_id = "Samsung Galaxy S24 (Family)"
 
 model = hub.get_model(model_id)
 device = hub.Device(device_id)

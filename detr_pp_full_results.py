@@ -18,14 +18,14 @@ from collections import Counter
 from qai_hub_models.utils.printing import print_profile_metrics_from_job
 from scipy.special import softmax
 
-detr = ['dj7d63pq9', 'dv91oekn2', 'dn7x4qre2', 'dv91oevn2', 'dj7d63vk9',
-        'dz2rn66l7', 'dd9p5zzo7', 'dz2rn6vl7', 'dr2qy6my7', 'dp7ldk5r2']
+detr = ['dz7z48rr9', 'dz2r53807', 'd82nd3e07', 'do7ml3v39', 'dq9kr31o7',
+        'dk7gkm162', 'd67jw4gz2', 'dn7xze8r9', 'dp70n6q09', 'dv74k3ny2']
 
-Device = 'D44'
+Device = 'D48'
 Model = 'M02'
 Runtime = 'tf'
-model_id = "mnl3pwrkn"
-device_id = "Samsung Galaxy S23 (Family)"
+model_id = "mn0lwxk8n"
+device_id = "Samsung Galaxy S24 (Family)"
 
 model = hub.get_model(model_id)
 device = hub.Device(device_id)

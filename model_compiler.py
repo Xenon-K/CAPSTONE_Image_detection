@@ -3,8 +3,8 @@ import re
 import csv
 
 # Device name (customize this)
-device = "Snapdragon 8cx Gen 3 CRD"
-runtime = 'onnx'
+device = "Google Pixel 5 (Family)"
+runtime = 'tflite'
 # Sanitize device name for safe file naming
 safe_device_name = device.replace(" ", "_")
 csv_file = f"models_{safe_device_name}_{runtime}.csv"
