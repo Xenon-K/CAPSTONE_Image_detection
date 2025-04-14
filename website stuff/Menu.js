@@ -33,6 +33,7 @@ function Menu() {
         <div className="nav-links">
           <Link to="/model-comparison">Model Comparisons</Link>
           <Link to="/detailed-comparison">Detailed Comparison</Link>
+          <Link to="/explore-now" className="cta-button">Explore Now</Link>
         </div>
         <a href="https://aihub.qualcomm.com/models?domain=Computer+Vision&useCase=Object+Detection" className="cta-button">
           Explore Now
