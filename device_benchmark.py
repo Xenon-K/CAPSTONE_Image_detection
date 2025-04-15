@@ -48,7 +48,7 @@ models = [("M01", ""),
           ("M12", "mnjl9401q"),
           ("M15", "mqy6evlrm"),
           ("M16", "mq8eodpjq"),
-          ("M17", "mn1e478vm"),]
+          ("M17", "mn1e478vm")]
 Device = 'D28'
 Runtime = 'tf'
 device_id = "Google Pixel 5 (Family)"
