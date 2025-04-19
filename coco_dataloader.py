@@ -11,6 +11,8 @@ folder_path = 'val2017'
 # Initialize output CSV file path and model flag
 csv_file_path = 'image_details.csv'
 model_flag = 0   # 0 for detr, 1 for yolo
+quant_flag = 0  # 0 for float 32, 1 for uint8
+transpose_flag = 0 # 0 for (1,480,480,3) tflite, 1 for (1,3,480,480) onnx
 
 
 # Function to load images in batches
@@ -30,6 +32,7 @@ def load_images_in_batches(folder_path, batch_size):
 
             # Prepare numpy array to store image data for this batch
             image_data_batch = []
+            datasets = []
 
             for image_file in batch_files:
                 # Open the image and get its original dimensions
@@ -51,12 +54,20 @@ def load_images_in_batches(folder_path, batch_size):
                         mean = np.array([0.485, 0.456, 0.406])
                         std = np.array([0.229, 0.224, 0.225])
                         image_array = ((image_array / 255.0 - mean) / std).astype(np.float32)
-                        extra_suffix = 'norm'
-                    else:
+                        extra_suffix += 'norm_small'
+                    elif quant_flag == 0:
                         image_array = (image_array / 255.0).astype(np.float32)
-                    #print(image_array.dtype)
+                    else:
+                        image_array = image_array.astype(np.uint8)
+                        extra_suffix += 'quant'
+
+                    if transpose_flag == 1:
+                        image_array = np.transpose(image_array, (2,0,1))
+                        extra_suffix += 'ONNX'
+
                     image_array = np.expand_dims(image_array, axis=0)
                     #print(image_array.dtype)
+                    #print(image_array.shape)
                     image_data_batch.append(image_array)
 
                     # Write the image name and its original dimensions to the CSV
@@ -73,13 +84,13 @@ def load_images_in_batches(folder_path, batch_size):
             dataset_name = 'coco_' + str(batch_number) + 'of' + str(batches) + '_' + str(resize) + extra_suffix
             print("Uploading", dataset_name)
             hub_dataset = hub.upload_dataset(data, dataset_name)
-
-            print(f"Processed batch {batch_number} with {len(batch_files)} images.")
+            print(hub_dataset)
+            print(f"Processed batch {batch_number} with {len(batch_files)} images.\n")
 
     print("Finished processing all batches!")
 
 if model_flag == 0:
-    batch_size = 500
+    batch_size = 250
     resize = 480
 elif model_flag == 1:
     batch_size = 250

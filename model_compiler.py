@@ -3,7 +3,7 @@ import re
 import csv
 
 # Device name (customize this)
-device = "Google Pixel 5 (Family)"
+device = "QCS8550 (Proxy)"
 runtime = 'tflite'
 # Sanitize device name for safe file naming
 safe_device_name = device.replace(" ", "_")
@@ -23,10 +23,9 @@ commands = [
     fr'python -m qai_hub_models.models.yolov8_det.export --device "{device}" --target-runtime {runtime} --height 640 --width 640 --skip-profiling --skip-inferencing',
     fr'python -m qai_hub_models.models.yolov10_det.export --device "{device}" --target-runtime {runtime} --height 640 --width 640 --skip-profiling --skip-inferencing',
     fr'python -m qai_hub_models.models.yolov11_det.export --device "{device}" --target-runtime {runtime} --height 640 --width 640 --skip-profiling --skip-inferencing',
-    fr'python -m qai_hub_models.models.yolov7_quantized.export --device "{device}" --target-runtime {runtime} --height 640 --width 640 --skip-profiling --skip-inferencing',
-    fr'python -m qai_hub_models.models.yolov8_det_quantized.export --device "{device}" --target-runtime {runtime} --height 640 --width 640 --skip-profiling --skip-inferencing',
-    fr'python -m qai_hub_models.models.yolov11_det_quantized.export --device "{device}" --target-runtime {runtime} --height 640 --width 640 --skip-profiling --skip-inferencing'
-    #fr'python -m qai_hub_models.models.rtmdet.export --device "{device}" --target-runtime {runtime} --height 640 --width 640 --skip-profiling --skip-inferencing'
+    fr'python -m qai_hub_models.models.yolov7.export --quantize w8a8 --device "{device}" --target-runtime {runtime} --height 640 --width 640 --skip-profiling --skip-inferencing',
+    fr'python -m qai_hub_models.models.yolov8_det.export --quantize w8a8 --device "{device}" --target-runtime {runtime} --height 640 --width 640 --skip-profiling --skip-inferencing',
+    fr'python -m qai_hub_models.models.yolov11_det.export --quantize w8a8 --device "{device}" --target-runtime {runtime} --height 640 --width 640 --skip-profiling --skip-inferencing'
 ]
 
 # Regex to extract model name and hub ID
