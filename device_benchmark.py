@@ -17,43 +17,42 @@ from collections import Counter
 from qai_hub_models.utils.printing import print_profile_metrics_from_job
 from scipy.special import softmax
 
-detr = ['dz7z48rr9', 'dz2r53807', 'd82nd3e07', 'do7ml3v39', 'dq9kr31o7',
-        'dk7gkm162', 'd67jw4gz2', 'dn7xze8r9', 'dp70n6q09', 'dv74k3ny2']
+detr = ['dr2qn5mo2','dp70wzje9','do7mpdyd7','dr9w4ekk2','dw26xz5e2','d67o5p0q9','dj7d1ezj7','dv95d83g2','d678qg3y7',
+        'do7mpdnd7','dp7lxeyn7','d67o5p8q9','dj7d1egj7','dr2qn5do2','do7mpdwd7',
+        'dp7lxeln7','dx9e4ey42','dj7d1ek87','dq9kdmy52','dw9v145j9']
 
 # yolo (1, 640, 640, 3) float 32
-yolo = ['dv9516pz2', 'do7ml3g39', 'dp7lg36j2', 'd67ox3lg7', 'dn7xzeor9',
-        'dr2qq30v2', 'do7ml34l9', 'dr9wm3lo2', 'dp7lg3e12', 'd67jw4mm2',
-        'dj7d0neq9', 'dq9kr3md7', 'dz2r534g7', 'dw264e1g9', 'dj7d0nvq9',
-        'dv95164e2', 'dq9kr3xd7', 'dw264ewg9', 'd67jw4lm2', 'dv9516je2']
+yolo = ['d09y181m9', 'dr9wmnmk2', 'dd9ppmpw9', 'dv910zr82', 'dd9ppm0n9', 'dj7d0gj89', 'dr9wmnj32', 'dr2qqdwl2',
+        'dd9ppmwd9', 'd09y184o9','dn7xzpyr9', 'd67oxwkg7', 'dr9wmxwm2', 'dd9ppend9',
+        'dw264pmg9', 'dq9krwed7', 'dz7z45ky9', 'dp7lgle12', 'd82ndzxo7', 'dx9e8yvv9']
 
 # yolo (1, 640, 640, 3) uint8
-yolo_q = ['dp70nxz09','d678rmgp2','do7mlrd39','dq9kr4mo7','dr9wmzem2',
-          'dk7gk8z62','d67jw1dz2','dd9ppxdd9','do7mlrq39','dr9wmzgm2',
-          'dz2r5qp07','dp7lgwpj2','d693m5y37','dj7d0y3p9','d82ndg6o7',
-          'dv74kylz2','dz7z41jy9','dv910p3x2','dw26405g9','dx9e8nlv9']
+yolo_q = ['dn7xzm559', 'dr2qqpel2', 'd09y1km39', 'dp70nxkl9', 'dq9kr4157', 'dv74kyjw2', 'dr9wmzw32', 'dz2r5qeo7',
+        'dk7gk81o2', 'dp7lgw0w2','dw2640g49', 'd693m5gl7', 'd67oxdzn7', 'd67jw1zn2', 'dx9e8ndp9',
+        'dz7z410r9', 'dj7d0yw89', 'dn7xzm859', 'dd9ppxnn9', 'dr2qqp4l2']
 
 
 '''-------------------------------------'''
 # put your models to run in here
 models = [("M01", ""),
-          ("M02", "mq8eo12gq"),
-          ("M03", ""),
-          ("M04", "mnl3pkdjn"),
-          ("M05", ""),
-          ("M06", "mqpv407jq"),
+          ("M02", ""),
+          #("M03", ""),
+          ("M04", ""),
+          #("M05", ""),
+          ("M06", "mq2lpk9wn"),
           #("M07", ""),
-          ("M08", "mmxxvzykm"),
-          ("M09", "mmxxvz9jm"),
-          ("M10", "mm54lwpyn"),
-          ("M11", "mq2lkzr7n"),
-          ("M12", "mq8eoxwpq"),
-          ("M15", "mqy6ewe5m"),
-          ("M16", "mmr4x2j6q"),
-          ("M17", "mnoew2z7q")
+          ("M08", "mq8evo4jq"),
+          ("M09", "mnwgpodxq"),
+          ("M10", ""),
+          ("M11", ""),
+          ("M12", ""),
+          ("M15", ""),
+          ("M16", ""),
+          ("M17", "")
           ]
-Device = 'D34'
+Device = 'D06'
 Runtime = 'tf'
-device_id = "Samsung Galaxy S21 (Family)"
+device_id = "SA8775P ADP"
 '''-------------------------------------'''
 
 # static variable
