@@ -1,0 +1,54 @@
+/* Methodology.css */
+.methodology-page {
+    font-family: 'Quicksand', sans-serif;
+    background-color: white;
+    color: black;
+    min-height: 100vh;
+    padding-top: 100px;
+  }
+  
+  .methodology-content {
+    padding: 40px;
+    text-align: center;
+    max-width: 960px;
+    margin: 0 auto;
+  }
+  
+  .methodology-content h2 {
+    font-size: 36px;
+    margin-bottom: 30px;
+  }
+  
+  .methodology-content p {
+    font-size: 16px;
+    line-height: 1.7;
+    margin-bottom: 20px;
+    text-align: left;
+  }
+  
+  .methodology-image-section {
+    margin: 40px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    align-items: center;
+  }
+  
+  .methodology-image-section img {
+    width: 100%;
+    max-width: 600px;
+    border-radius: 12px;
+    object-fit: cover;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  .methodology-content ul {
+    text-align: left;
+    margin-left: 20px;
+  }
+  
+  .methodology-content li {
+    margin-bottom: 8px;
+    line-height: 1.6;
+  }
+  
