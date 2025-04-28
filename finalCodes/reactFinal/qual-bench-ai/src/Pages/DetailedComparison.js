@@ -1,9 +1,11 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Chart from 'chart.js/auto';
 import './DetailedComparison.css';
 import csusmLogo from './csusm-logo.png';
 import qualcommLogo from './qualcomm-ai-hub-logo.png';
+
+const API_BASE_URL = 'https://qualbenchai-backend-production.up.railway.app'; // Replace with your actual Railway backend URL
 
 const DetailedComparisonPage = () => {
   // State for devices, model data and selections.
@@ -40,7 +42,59 @@ const DetailedComparisonPage = () => {
   // Maximum values for the y-axis of each chart. Added to yAxisMax
   const yAxisMax = [1, null, null, null, null, null, null, 1, 1, 1];
 
-  // Fetch devices from the backend on component mount.
+    // Fetch devices from the backend on component mount.
+    useEffect(() => {
+        const fetchDevices = async () => {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/devices`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                setDevices(data);
+                if (data.length > 0) {
+                    setSelectedDevice(data[0].device_id);
+                }
+            } catch (error) {
+                console.error("Failed to fetch devices:", error);
+                //  setError('Failed to fetch devices. Please check your network connection and backend server.'); //You can set an error message.
+            }
+        };
+        fetchDevices();
+    }, []);
+
+    // Fetch model data for the selected device whenever selectedDevice changes.
+    useEffect(() => {
+        const fetchModelData = async () => {
+            if (!selectedDevice) return;
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/modeldata?device_id=${selectedDevice}`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                const modelDataFromServer = data.data || {};
+                setModelData(modelDataFromServer);
+
+                const models = Object.keys(modelDataFromServer);
+                if (models.length > 0) {
+                    setSelectedModels(prev => ({
+                        model1: models.includes(prev.model1) ? prev.model1 : models[0],
+                        model2: models.includes(prev.model2) ? prev.model2 : models[0],
+                    }));
+                } else {
+                    setSelectedModels({ model1: '', model2: '' });
+                }
+            } catch (error) {
+                console.error("Failed to fetch model data:", error);
+                //  setError('Failed to fetch model data. Please check your network connection and backend server.');
+            }
+        };
+        fetchModelData();
+    }, [selectedDevice]);
+
+    /*
+// Fetch devices from the backend on component mount.
   useEffect(() => {
     fetch('http://172.25.133.11:5000/api/devices')
       .then((res) => res.json())
@@ -77,8 +131,11 @@ const DetailedComparisonPage = () => {
         .catch((err) => console.error(err));
     }
   }, [selectedDevice]);
+    */
 
   // Helper to get model metrics for the currently selected device.
+  // If data is missing, return an array of zeros.  Adjusted to return 7 zeros.
+// Helper to get model metrics for the currently selected device.
   // If data is missing, return an array of zeros.  Adjusted to return 7 zeros.
   const getModelMetrics = (modelName) => {
     const metrics = modelData[modelName];
