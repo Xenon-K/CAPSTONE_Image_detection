@@ -93,7 +93,7 @@ const DetailedComparisonPage = () => {
         fetchModelData();
     }, [selectedDevice]);
 
-    /*
+/*
 // Fetch devices from the backend on component mount.
   useEffect(() => {
     fetch('http://172.25.133.11:5000/api/devices')
@@ -131,7 +131,7 @@ const DetailedComparisonPage = () => {
         .catch((err) => console.error(err));
     }
   }, [selectedDevice]);
-    */
+  */
 
   // Helper to get model metrics for the currently selected device.
   // If data is missing, return an array of zeros.  Adjusted to return 7 zeros.
