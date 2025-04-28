@@ -5,6 +5,8 @@ import "./ModelComparison.css";
 import csusmLogo from './csusm-logo.png';
 import qualcommLogo from './qualcomm-ai-hub-logo.png';
 
+const API_BASE_URL = 'https://qualbenchai-backend-production.up.railway.app'; // Replace with your actual Railway backend URL
+
 const ModelComparison = () => {
   const chartRef = useRef(null);
   const chartInstanceRef = useRef(null);
@@ -21,7 +23,7 @@ const ModelComparison = () => {
   };
 
   useEffect(() => {
-    fetch('http://172.25.133.11:5000/api/devices')
+    fetch(`${API_BASE_URL}/api/devices`) // Use the API_BASE_URL
       .then(res => res.json())
       .then(data => {
         setDevices(data);
@@ -32,6 +34,25 @@ const ModelComparison = () => {
       .catch(err => console.error(err));
   }, []);
 
+  useEffect(() => {
+    if (selectedDevice) {
+      fetch(`${API_BASE_URL}/api/metrics?device_id=${selectedDevice}&metric=${selectedMetric}&sort_order=${selectedSortOrder}`) // Use the API_BASE_URL
+        .then(res => res.json())
+        .then(data => {
+          setChartData(data);
+        })
+        .catch(err => console.error(err));
+
+      fetch(`${API_BASE_URL}/api/modeldata?device_id=${selectedDevice}`) // Use the API_BASE_URL
+        .then(res => res.json())
+        .then(data => {
+          setModelData(data.data);
+        })
+        .catch(err => console.error(err));
+    }
+  }, [selectedDevice, selectedMetric, selectedSortOrder]);
+
+  /*
   useEffect(() => {
     if (selectedDevice) {
       fetch(`http://172.25.133.11:5000/api/metrics?device_id=${selectedDevice}&metric=${selectedMetric}&sort_order=${selectedSortOrder}`)
@@ -49,7 +70,8 @@ const ModelComparison = () => {
         .catch(err => console.error(err));
     }
   }, [selectedDevice, selectedMetric, selectedSortOrder]);
-
+  */
+ 
   useEffect(() => {
     if (chartRef.current) {
       if (chartInstanceRef.current) {
@@ -155,7 +177,7 @@ const ModelComparison = () => {
         </div>
         <div className="desktop-spacer"></div>
       </div>
-      
+
       <div className="main-section-chart">
         <select className="dropdown" value={selectedDevice} onChange={handleDeviceChange}>
           {devices.map(device => (
@@ -202,7 +224,7 @@ const ModelComparison = () => {
       <div className="table-container">
         <table>
           <thead>
-          <tr>
+            <tr>
               <th>Model</th>
               <th>mAP</th>
               <th>Inference Time (ms)</th>
